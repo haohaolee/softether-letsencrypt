@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  app:
+    image: siomiz/softethervpn:alpine
+    container_name: "softethervpn"
+    volumes:
+      - "./vpn_server.config:/usr/vpnserver/vpn_server.config"
+      - "./scripts/install_cert.sh:/usr/vpnserver/scripts/install_cert.sh"
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 500:500/udp
+      - 4500:4500/udp
+      - 1701:1701/tcp
+      - 1194:1194/udp
+      - 5555:5555/tcp
+    restart: always
+
+  letsencrypt:
+    image: adferrand/letsencrypt-dns
+    container_name: "letsencrypt-dns"
+    env_file: .env
+    volumes:
+      - "./domains.conf:/etc/letsencrypt/domains.conf"
+      - "./letsencrypt:/etc/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./scripts/restart_docker.sh:/usr/local/bin/restart_docker"
+    environment:
+      - VERSION=latest
+      - "LETSENCRYPT_USER_MAIL=$EMAIL"
+      - "LEXICON_PROVIDER=$PROVIDER"
+      - "LEXICON_PROVIDER_OPTIONS=$PROVIDER_OPTIONS"
+      - "LEXICON_SLEEP_TIME=$SLEEP_TIME"
+      - "CERTS_DIRS_MODE=$DIRS_MODE"
+      - "CERTS_FILES_MODE=$FILES_MODE"
+    restart: always
+    depends_on:
+      - softethervpn
+

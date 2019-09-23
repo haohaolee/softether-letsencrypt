@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  app:
+  softethervpn:
     image: siomiz/softethervpn:alpine
     container_name: "softethervpn"
     volumes:

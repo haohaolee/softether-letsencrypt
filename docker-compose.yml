@@ -7,6 +7,8 @@ services:
     volumes:
       - "./vpn_server.config:/usr/vpnserver/vpn_server.config"
       - "./scripts/install_cert.sh:/usr/vpnserver/scripts/install_cert.sh"
+    environment:
+      - "SPW=$SERVER_PASS"
     cap_add:
       - NET_ADMIN
     ports:

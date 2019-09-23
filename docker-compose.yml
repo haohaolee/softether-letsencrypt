@@ -37,6 +37,7 @@ services:
       - "LEXICON_SLEEP_TIME=$SLEEP_TIME"
       - "CERTS_DIRS_MODE=$DIRS_MODE"
       - "CERTS_FILES_MODE=$FILES_MODE"
+      - "DEPLOY_HOOK=restart_docker"
     restart: always
     depends_on:
       - softethervpn
